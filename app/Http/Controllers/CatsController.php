@@ -109,4 +109,11 @@ class CatsController extends Controller
 
         Cats::where('id', $catId)->update($data);
     }
+
+    public function deleteCats(Request $request)
+    {
+        $id = $request->id;        
+        $data = Cats::find($id);		
+		$data->delete();	
+    }
 }

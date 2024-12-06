@@ -41,7 +41,8 @@
 			</div>
 			<div class="text-right d-flex justify-content-end">
 				@if($model->exists)
-					<button type="submit" class="btn btn-primary btn-sm" id="updated_btn">SAVE</button>
+					<button type="submit" class="btn btn-primary btn-sm me-2" id="updated_btn">SAVE</button>
+					<button type="button" class="btn btn-sm btn-danger" onclick="btn_delete({{ $model->id }});">DELETE</button>
 				@else
 					<button type="submit" class="btn btn-primary btn-sm" id="submit_btn">CREATE</button>
 				@endif
@@ -110,4 +111,32 @@ $(document).ready(function() {
         });
     });
 });
+
+function btn_delete(id)
+{
+	var csrf_token = '{{ csrf_token() }}';
+	var modalAdd = bootstrap.Modal.getInstance(document.getElementById('modal_add'));
+	Swal.fire({
+		icon: 'warning',
+		title: 'Are you sure ?',
+		allowOutsideClick: false
+	}).then((result) => {
+		if (result.value)
+		{
+			$.ajax({
+				url:"{{ route('deleteCats') }}",
+				data: {id:id, '_token' : csrf_token},
+				method : 'delete',
+				success: function(msg){
+					Swal.fire({
+						icon : 'success',
+					}).then(function() {
+						modalAdd.hide();
+						$('#data-cats').DataTable().ajax.reload();
+					});
+				}
+			});
+		}
+	});
+}
 </script>

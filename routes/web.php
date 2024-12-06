@@ -23,3 +23,4 @@ Route::post('addCats', [CatsController::class, 'addCats'])->name('addCats');
 Route::post('storeCats', [CatsController::class, 'storeCats'])->name('storeCats');
 Route::post('viewCats', [CatsController::class, 'viewCats'])->name('viewCats');
 Route::put('updateCats', [CatsController::class, 'updateCats'])->name('updateCats');
+Route::delete('deleteCats', [CatsController::class, 'deleteCats'])->name('deleteCats');
