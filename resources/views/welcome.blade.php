@@ -8,16 +8,9 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-        
-        
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-        <!-- Include SweetAlert CDN -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-        
         <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
         <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
         <script src="https://cdn.datatables.net/rowreorder/1.5.0/js/dataTables.rowReorder.js"></script>
@@ -38,7 +31,7 @@
                             <i class="fa fa-list"></i>&nbsp; Cats Lists
                         </div>                               
                         <div class="card-body" id="list_input">
-							<div class="row">                                
+							<div class="row px-3">                                
                                 <div class="col-md-3 mt-2">
                                     <label class="control-label label-form">Gender</label>
                                     <select id="jenisKelamin" class="form-control select2" style="width:100%" data-placeholder="Please Select" data-allow-clear="true">
@@ -53,7 +46,7 @@
                             </div>
 							<div class="row">
 								<div class="mt-4 table-responsive">
-									<table class="table table-bordered table-sm table-striped table_row" id="data-cats" width="100%">
+									<table class="table table-bordered table-sm table-striped table_row table-hover" id="data-cats" style="cursor:pointer" width="100%">
 										<thead>
 											<tr>
 												<th class="all text-center">No.</th>

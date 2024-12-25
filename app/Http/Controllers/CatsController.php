@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Cats;
 use App\Models\Encrypt;
 use DataTables;
@@ -56,22 +57,20 @@ class CatsController extends Controller
 
     public function storeCats(Request $request)
     {
-        $this->validate($request, [            
-            'name' 	=> 'required',
-            'breed' => 'required',
-            'gender'=> 'required'
+        $validator = Validator::make($request->all(), [
+            "name" => "required|string|max:255",
+            "breed" => "required|string|max:255",
+            "gender" => "required",
         ]);
-		
-		$encrypt = new Encrypt;
-        $gender = $encrypt->encrypt_decrypt($request->gender, 'decrypt');
-		
-		$data = array(
-            'name' 	    => $request->name,
-            'breed' 	=> $request->breed,
-            'gender'    => $gender
-        );
-		$model = Cats::create($data);
-		return json_encode($data);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+        $data = Cats::addCat($validator->validated());
+        return response()->json($data, 201);
     }
 
     public function viewCats(Request $request)
@@ -93,27 +92,49 @@ class CatsController extends Controller
 
     public function updateCats(Request $request)
     {
-        $encrypt = new Encrypt;
-		$catId = $request->catId;
-        $gender = $encrypt->encrypt_decrypt($request->gender, 'decrypt');
-
-		$this->validate($request, [            
-            'name' 	=> 'required',
-            'breed' => 'required',
-            'gender'=> 'required'
+        $validator = Validator::make($request->all(), [
+            "catId" => "required|string",
+            "name" => "required|string|max:255",
+            "breed" => "required|string|max:255",
+            "gender" => "required",
         ]);
-		
-        $data['name'] = $request->name;
-		$data['breed'] = $request->breed;
-		$data['gender'] = $gender;
 
-        Cats::where('id', $catId)->update($data);
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+        $result = Cats::updateCat($validator->validated());
+
+        if (!$result['success']) {
+            return response()->json([
+                'error' => $result['message'],
+            ], $result['status']);
+        }
+
+        return response()->json([
+            'message' => $result['message'],
+            'data' => $result['data'],
+        ], 200);
     }
 
     public function deleteCats(Request $request)
     {
-        $id = $request->id;        
-        $data = Cats::find($id);		
-		$data->delete();	
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|integer|exists:cats,id,deleted_at,NULL',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+        $result = Cats::deleteCat($request->id);
+
+        return response()->json([
+            'message' => $result['message'],
+        ], 200);
     }
 }
